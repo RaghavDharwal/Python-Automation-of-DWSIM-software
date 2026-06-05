@@ -1,27 +1,28 @@
-# Python-Automation-of-DWSIM-software
+# Python Automation of DWSIM Software
 
 Headless Python screening task for DWSIM Automation API.
 
 ## Overview
 
-This project demonstrates Python automation of DWSIM chemical process simulation software. It programmatically constructs flowsheets, runs parametric sweeps, and generates comprehensive results without any GUI interaction.
+This project demonstrates how Python can be used to automate DWSIM, a chemical process simulation tool. Rather than relying on the graphical interface, it builds flowsheets programmatically, runs parametric sweeps across multiple configurations, and collects the results — all without any manual interaction.
 
 ## What This Does
 
-- **Part A - PFR Reactor**: Builds a Plug Flow Reactor flowsheet for an irreversible reaction `A → B` with isothermal, volume-based sizing
-- **Part B - Distillation Column**: Builds a binary distillation column flowsheet with configurable stages, feed stage, reflux ratio, and additional specifications
+- **Part A - PFR Reactor**: Constructs a Plug Flow Reactor flowsheet for an irreversible reaction `A → B`, set up for isothermal, volume-based sizing.
+- **Part B - Distillation Column**: Builds a binary distillation column flowsheet with configurable stages, feed stage, reflux ratio, and additional specifications.
 - **Part C - Parametric Sweeps**:
-  - PFR: Sweeps reactor volume and temperature
-  - Column: Sweeps reflux ratio and number of stages
-- **Results Logging**: All cases logged to `results.csv` with success/failure status and KPIs
-- **Error Handling**: Failed cases recorded gracefully with error messages
-- **Optional Plotting**: Visualizes parametric trends with matplotlib
+  - PFR: Sweeps reactor volume and temperature.
+  - Column: Sweeps reflux ratio and number of stages.
+- **Results Logging**: Every case is recorded to `results.csv` with its success or failure status alongside the relevant KPIs.
+- **Error Handling**: Failed cases are captured gracefully, with the error message preserved in the output file.
+- **Optional Plotting**: Visualises parametric trends using matplotlib.
 
 ## Prerequisites
 
 ### Software Requirements
+
 - **DWSIM** (Version 6.0 or higher recommended)
-  - Windows: Download from [DWSIM website](https://dwsim.org)
+  - Windows: Download from the [DWSIM website](https://dwsim.org)
   - Linux: Use Mono runtime or Wine
   - macOS: Use Mono runtime (experimental)
 - **Python 3.9+**
@@ -57,13 +58,13 @@ git clone <repository-url>
 cd Python-Automation-of-DWSIM-software
 ```
 
-### 2. Create Virtual Environment
+### 2. Create a Virtual Environment
 
 ```bash
 python -m venv .venv
 ```
 
-### 3. Activate Virtual Environment
+### 3. Activate the Virtual Environment
 
 **Windows (PowerShell):**
 ```powershell
@@ -88,9 +89,9 @@ pip install -r requirements.txt
 
 ## Configuration
 
-### Set DWSIM Installation Directory
+### Set the DWSIM Installation Directory
 
-The script needs to know where DWSIM is installed. Set the environment variable:
+The script needs to know where DWSIM is installed. Set the environment variable before running:
 
 **Windows (PowerShell):**
 ```powershell
@@ -107,14 +108,14 @@ set DWSIM_INSTALL_DIR=C:\Program Files\DWSIM
 export DWSIM_INSTALL_DIR="/path/to/DWSIM"
 ```
 
-**Or pass it as a command-line argument:**
+Alternatively, pass it directly as a command-line argument:
 ```bash
 python run_screening.py --dwsim-dir "/path/to/DWSIM"
 ```
 
 ### Required DWSIM Assemblies
 
-The script expects these DLL files in the DWSIM directory:
+The script expects the following DLL files to be present in the DWSIM directory:
 - `DWSIM.Automation.dll`
 - `DWSIM.Interfaces.dll`
 - `DWSIM.Thermodynamics.dll`
@@ -130,14 +131,11 @@ Run with default parameters:
 python run_screening.py
 ```
 
-This will:
-- Create 9 PFR cases (3 volumes × 3 temperatures)
-- Create 9 column cases (3 reflux ratios × 3 stage counts)
-- Output results to `results.csv`
+This will create 9 PFR cases (3 volumes x 3 temperatures), 9 column cases (3 reflux ratios x 3 stage counts), and write all results to `results.csv`.
 
 ### Custom Parametric Sweeps
 
-Customize sweep parameters:
+You can customise the sweep parameters directly from the command line:
 
 ```bash
 python run_screening.py \
@@ -149,42 +147,40 @@ python run_screening.py \
 ```
 
 **Parameters:**
-- `--dwsim-dir`: Path to DWSIM installation (overrides environment variable)
+- `--dwsim-dir`: Path to DWSIM installation (overrides the environment variable)
 - `--pfr-volumes`: Comma-separated list of reactor volumes in m³
 - `--pfr-temps`: Comma-separated list of PFR temperatures in Kelvin
 - `--col-reflux`: Comma-separated list of reflux ratios
-- `--col-stages`: Comma-separated list of number of stages
+- `--col-stages`: Comma-separated list of stage counts
 - `--results`: Output CSV file path
 
 ### Generate Plots (Optional)
 
-After running the simulation, visualize results:
+After running the simulation, you can visualise the results:
 
 ```bash
 python plot_results.py --input results.csv --output-dir plots
 ```
 
-This generates:
-- `pfr_parametric_sweep.png` - PFR conversion, product flow, and duty trends
-- `column_parametric_sweep.png` - Column purity and duty trends
-- `success_rate.png` - Simulation success rate summary
+This generates three plots:
+- `pfr_parametric_sweep.png` — PFR conversion, product flow, and duty trends
+- `column_parametric_sweep.png` — Column purity and duty trends
+- `success_rate.png` — A summary of simulation success rates
 
 ## Output Format
 
 ### results.csv
-
-The CSV file contains these columns:
 
 | Column | Description |
 |--------|-------------|
 | `case_id` | Unique identifier for each case |
 | `model` | Model type: PFR or COLUMN |
 | `status` | OK or FAILED |
-| `message` | Error message (if failed) |
-| `sweep_var_1` | Name of first sweep variable |
-| `sweep_val_1` | Value of first sweep variable |
-| `sweep_var_2` | Name of second sweep variable |
-| `sweep_val_2` | Value of second sweep variable |
+| `message` | Error message (if the case failed) |
+| `sweep_var_1` | Name of the first sweep variable |
+| `sweep_val_1` | Value of the first sweep variable |
+| `sweep_var_2` | Name of the second sweep variable |
+| `sweep_val_2` | Value of the second sweep variable |
 | `conversion` | PFR conversion (fraction) |
 | `outlet_b_mol_s` | PFR outlet flow of product B (mol/s) |
 | `reactor_duty_kw` | PFR heat duty (kW) |
@@ -213,30 +209,27 @@ The CSV file contains these columns:
 - **Property Package**: Peng-Robinson
 
 ### Error Handling
-- Failed simulations are logged with status "FAILED"
-- Error messages captured in the `message` column
-- Graceful degradation - script continues even if individual cases fail
-- Property access attempts multiple formats for DWSIM version compatibility
+
+Failed simulations are logged with the status "FAILED" and the corresponding error message captured in the `message` column. The script continues running even when individual cases fail, so a single bad configuration won't halt the entire sweep. Property access attempts multiple formats to account for differences between DWSIM versions.
 
 ## Troubleshooting
 
 ### Common Issues
 
-#### 1. "pythonnet is required"
+**"pythonnet is required"**
 ```bash
 pip install pythonnet==3.0.3
 ```
 
-#### 2. "Missing DWSIM assembly"
-- Verify DWSIM is installed
-- Check `DWSIM_INSTALL_DIR` points to correct directory
-- Ensure DLL files exist in that directory
+**"Missing DWSIM assembly"**
+- Verify that DWSIM is installed.
+- Confirm that `DWSIM_INSTALL_DIR` points to the correct directory.
+- Check that the expected DLL files exist in that location.
 
-#### 3. ".NET Framework not found" (Windows)
-- Install .NET Framework 4.8 or higher
-- Download from Microsoft website
+**".NET Framework not found" (Windows)**
+- Install .NET Framework 4.8 or higher from the Microsoft website.
 
-#### 4. "Mono not found" (Linux/macOS)
+**"Mono not found" (Linux/macOS)**
 ```bash
 # Ubuntu/Debian
 sudo apt-get install mono-complete
@@ -245,32 +238,23 @@ sudo apt-get install mono-complete
 brew install mono
 ```
 
-#### 5. Simulation fails with property errors
-- DWSIM versions may use different property names
-- Check DWSIM documentation for your version
-- Update property strings in `DwsimFacade` methods if needed
+**Simulation fails with property errors**
+- Property names can vary between DWSIM versions.
+- Cross-check against the DWSIM documentation for your installed version.
+- Update the relevant property strings in the `DwsimFacade` methods if needed.
 
-#### 6. All cases show FAILED status
-- Verify DWSIM can run standalone simulations
-- Check property package is compatible with components
-- Review error messages in `results.csv` for specific issues
+**All cases show FAILED status**
+- Verify that DWSIM can run standalone simulations without issues.
+- Check that the property package is compatible with the selected components.
+- Review the error messages in `results.csv` for more specific guidance.
 
 ### Platform-Specific Notes
 
-**Windows:**
-- Most stable platform for DWSIM automation
-- .NET Framework native support
+**Windows** is the most stable platform for DWSIM automation, with native .NET Framework support.
 
-**Linux:**
-- Requires Mono runtime
-- Some DWSIM features may be limited
-- Test with small sweeps first
+**Linux** requires the Mono runtime. Some DWSIM features may be limited — it is worth testing with small sweeps before scaling up.
 
-**macOS:**
-- Experimental support through Mono
-- May require additional configuration
-- Some assemblies might not load properly
-- **⚠️ Apple Silicon (M1/M2/M3) Note:** The Mono framework may not be compatible with ARM64 architecture. See [MACOS_LIMITATIONS.md](MACOS_LIMITATIONS.md) for details. Code is Windows-ready and production-tested.
+**macOS** support is experimental via Mono, and may require additional configuration. Some assemblies may not load correctly. Note that on Apple Silicon (M1/M2/M3) hardware, the Mono framework may not be compatible with ARM64 architecture — see [MACOS_LIMITATIONS.md](MACOS_LIMITATIONS.md) for details. The code is Windows-ready and production-tested.
 
 ## Code Structure
 
@@ -289,7 +273,7 @@ run_screening.py          # Main simulation script
 ├── sweep_column()       # Column parametric sweep
 └── main()               # CLI entry point
 
-plot_results.py          # Optional visualization
+plot_results.py          # Optional visualisation
 ├── load_results()
 ├── plot_pfr_results()
 ├── plot_column_results()
@@ -298,43 +282,33 @@ plot_results.py          # Optional visualization
 
 ## Evaluation Criteria Addressed
 
-✅ **Correctness**: Properly constructs flowsheets and extracts KPIs  
-✅ **Robustness**: Handles failed cases gracefully with error logging  
-✅ **Parametric Sweep**: Implements 2-variable sweeps for both models  
-✅ **Headless Execution**: No GUI interaction, fully automated  
-✅ **Code Quality**: Clean, modular, well-documented code  
-✅ **Documentation**: Comprehensive README with setup and usage instructions
+- **Correctness**: Properly constructs flowsheets and extracts KPIs.
+- **Robustness**: Handles failed cases gracefully with error logging.
+- **Parametric Sweep**: Implements two-variable sweeps for both models.
+- **Headless Execution**: No GUI interaction — fully automated throughout.
+- **Code Quality**: Clean, modular, and well-documented code.
+- **Documentation**: Comprehensive README covering setup and usage.
 
 ## Notes on DWSIM Versions
 
-DWSIM property names and API calls can vary between versions. This script includes:
-- Multiple property name formats (e.g., "Temperature" vs "T")
-- Fallback mechanisms for different API patterns
-- Error handling for version-specific features
+DWSIM property names and API calls can vary between versions. This script includes multiple property name formats (for example, "Temperature" vs "T"), fallback mechanisms for different API patterns, and error handling for version-specific features.
 
-If you encounter issues with your DWSIM version:
-1. Check property names using DWSIM GUI
-2. Review DWSIM Automation documentation for your version
-3. Update property strings in `DwsimFacade` methods accordingly
+If you encounter issues with your DWSIM version, check the relevant property names in the DWSIM GUI, review the Automation documentation for your version, and update the property strings in `DwsimFacade` methods accordingly.
 
-## No GUI Interaction
+## Headless Operation
 
-The script uses the Automation API directly and does not launch the DWSIM GUI. All operations are performed headlessly, making it suitable for:
-- Batch processing
-- Automated workflows
-- CI/CD pipelines
-- Remote servers without display
+The script uses the Automation API directly and does not launch the DWSIM GUI at any point. All operations run headlessly, making it suitable for batch processing, automated workflows, CI/CD pipelines, and remote servers without a display.
 
 ## Submission
 
 To submit this project:
-1. Ensure all required files are present:
-   - run_screening.py
-   - requirements.txt
-   - README.md
-   - results.csv (will be generated)
-   - plot_results.py (optional)
-2. Compress the folder
-3. Upload to Google Drive
-4. Submit the link: https://forms.gle/WFA3Wem6nZKu414UA
 
+1. Ensure all required files are present:
+   - `run_screening.py`
+   - `requirements.txt`
+   - `README.md`
+   - `results.csv` (generated on run)
+   - `plot_results.py` (optional)
+2. Compress the folder.
+3. Upload to Google Drive.
+4. Submit the link: https://forms.gle/WFA3Wem6nZKu414UA
